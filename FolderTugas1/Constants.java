@@ -19,9 +19,16 @@ public class Constants {
 // Variables 1
 // 
 // Dari 2 contoh baris program diatas, jawablah pertanyaan dibawah ini:? 
-// Bagaimana output dari masing masing class Constants dan Constants2
+//
+// 1. Bagaimana output dari masing masing class Constants dan Constants2
 // jawab: Output sama, yaitu: `Paper size in centimeters: 21.59 by 27.94`
 // Kedua kelas menghasilkan output yang sama karena meskipun cara mendeklarasikan konstanta CM_PER_INCH berbeda, 
 // nilainya tetap sama (2.54) dan digunakan dalam perhitungan yang identik.
 //
-//
+// 2. Apa perbedaan penggunaan final double dengan public static final double?
+// jawab: Perbedaan utama antara `final double` dan `public static final double` terletak pada cakupan akses dan sifat variabel tersebut.
+// - `final double` mendeklarasikan variabel sebagai konstanta yang nilainya tidak dapat diubah setelah inisialisasi, tetapi variabel ini bersifat instance-level,
+//   yang berarti setiap instance dari kelas memiliki salinan sendiri dari variabel tersebut.
+// - `public static final double` mendeklarasikan variabel sebagai konstanta yang juga tidak dapat diubah, tetapi variabel ini bersifat class-level (static),
+//   yang berarti hanya ada satu salinan variabel tersebut yang dibagikan di antara semua instance dari kelas. Selain itu, karena variabel ini bersifat public,
+//   ia dapat diakses dari luar kelas.
