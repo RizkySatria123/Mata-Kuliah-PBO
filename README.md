@@ -7,4 +7,4 @@ NIM    : 241511089
 
 Kelas  : 2C
 
-[W1](./W1)
+[Folder Tugas 1](./W1)
