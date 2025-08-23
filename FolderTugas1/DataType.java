@@ -1,3 +1,7 @@
+// File: FolderTugas1/DataType.java
+// Deskripsi: Program Java untuk menentukan tipe data yang dapat menampung angka yang diberikan
+// Pembuat: Rizky Satria Gunawan
+
 import java.util.Scanner;
 public class DataType {
     public static void main(String[] args) {
