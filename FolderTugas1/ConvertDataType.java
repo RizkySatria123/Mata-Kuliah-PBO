@@ -26,8 +26,9 @@ public class ConvertDataType {
 // menghasilkan nilai float 10.25. Kemudian, nilai float ini dikonversi menjadi long melalui casting, yang menghasilkan nilai long 10 (karena bagian desimal dihilangkan).
 //
 // 2. Jelaskan apa yang berubah dari variable d menjadi variable b setelah
-// dilakukan cast? variabel d berubah saat memanggil methodOne dengan parameter
+// dilakukan cast? 
+// Jawab: variabel d berubah saat memanggil methodOne dengan parameter
 // f yang dicasting ke long sehingga keluaran menjadi bilangan bulat. methodOne
 // mengonversi long ke int lalu ke short tidak mengubah nilai
-// Jawab: Perubahan dari variabel d ke variabel b terjadi melalui beberapa tahap konversi tipe data:
+// Perubahan dari variabel d ke variabel b terjadi melalui beberapa tahap konversi tipe data:
 // - Variabel d awalnya bertipe double dengan nilai 10.25.
