@@ -8,3 +8,4 @@ NIM    : 241511089
 Kelas  : 2C
 
 [FolderTugas1](./FolderTugas1)
+[FolderTugas2](./FolderTugas2)
