@@ -1,0 +1,48 @@
+Jawaban bagian A 
+
+1. Solusi Multiple Inheritance di Java
+Bagian pada diagram yang menunjukkan solusi untuk multiple inheritance di Java 
+adalah hubungan antara kelas Fulltime, kelas abstrak Employee, dan interface LoanMonthly.
+
+Java tidak mendukung multiple inheritance 
+(sebuah kelas tidak bisa mewarisi lebih dari satu kelas). 
+Namun, masalah ini bisa diatasi dengan menggunakan kombinasi satu kelas warisan (extends) dan implementasi satu atau lebih interface (implements).
+
+Contoh Syntax code nya :
+
+public class Employee extends Person implements LoanMonthly {
+    @Override
+    public double getLoanMonthly() {
+        // hitung cicilan pinjaman koperasi
+    }
+}
+
+2. Relasi Agregasi (Has-A Relationship)
+Bagian pada diagram yang menerapkan relasi agregasi (has-a relationship) 
+adalah garis dengan simbol wajik kosong (hollow diamond) yang menghubungkan kelas Department dengan kelas Employee.
+
+Agregasi adalah bentuk asosiasi khusus yang merepresentasikan hubungan "memiliki" atau "terdiri dari" 
+(whole-part), di mana "bagian" (part) dapat ada secara independen dari "keseluruhan" (whole).
+
+Whole (Department): Kelas Department bertindak sebagai "keseluruhan".
+
+Part (Employee): Kelas Employee bertindak sebagai "bagian".
+
+Diagram ini dibaca sebagai: Sebuah Department memiliki (has-a) seorang Employee (atau beberapa Employee). 
+Hubungan ini bersifat agregasi karena jika sebuah objek Department dihancurkan,
+objek Employee yang terkait dengannya tidak ikut hancur dan bisa saja dipindahkan ke departemen lain. 
+Kehidupan objek Employee tidak bergantung sepenuhnya pada Department.
+
+Contoh Syntax code nya :
+
+public class Employee extends Person implements LoanMonthly {
+    private Department department;
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+}
