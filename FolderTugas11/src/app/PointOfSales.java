@@ -29,6 +29,8 @@ import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
@@ -38,6 +40,13 @@ import javax.swing.table.DefaultTableModel;
 public class PointOfSales extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final Locale ID_LOCALE = Locale.forLanguageTag("id-ID");
+    private static final String INFO_TITLE = "Informasi";
+    private static final String RECEIPT_HEADER = "==== Struk Belanja ====";
+    private static final String RECEIPT_DIVIDER = "------------------------------------------------------------";
+    private static final String RECEIPT_TABLE_HEADER = String.format(Locale.US, "%-6s %-18s %5s %12s %12s%n", "ID",
+            "Produk", "Qty", "Harga", "Subtotal");
+    private static final String NEW_LINE = System.lineSeparator();
+    private static final DateTimeFormatter RECEIPT_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private final DefaultTableModel productTableModel;
     private final DefaultTableModel cartTableModel;
@@ -51,7 +60,7 @@ public class PointOfSales extends JFrame {
 
     public PointOfSales() {
         super("POIN Off-Sales - Java Swing");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         setPreferredSize(new Dimension(1100, 600));
 
@@ -166,8 +175,7 @@ public class PointOfSales extends JFrame {
                 switch (columnIndex) {
                     case 2:
                         return Integer.class;
-                    case 3:
-                    case 4:
+                    case 3, 4:
                         return Double.class;
                     default:
                         return String.class;
@@ -255,7 +263,7 @@ public class PointOfSales extends JFrame {
     private void addSelectedProductToCart() {
         int selectedRow = productTable.getSelectedRow();
         if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Harap pilih produk terlebih dahulu.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            showInfoMessage("Harap pilih produk terlebih dahulu.");
             return;
         }
 
@@ -288,7 +296,7 @@ public class PointOfSales extends JFrame {
 
     private void performCheckout() {
         if (cartTableModel.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Keranjang masih kosong.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            showInfoMessage("Keranjang masih kosong.");
             return;
         }
 
@@ -296,15 +304,15 @@ public class PointOfSales extends JFrame {
         int points = (int) (total / 1000);
 
         StringBuilder builder = new StringBuilder();
-        builder.append("==== Struk Belanja ====")
-               .append(System.lineSeparator());
+        builder.append(RECEIPT_HEADER)
+                .append(NEW_LINE);
         builder.append("Waktu : ")
-               .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
-               .append(System.lineSeparator())
-               .append(System.lineSeparator());
-        builder.append(String.format("%-6s %-18s %5s %12s %12s%n", "ID", "Produk", "Qty", "Harga", "Subtotal"));
-        builder.append("------------------------------------------------------------")
-               .append(System.lineSeparator());
+                .append(LocalDateTime.now().format(RECEIPT_TIME_FORMATTER))
+                .append(NEW_LINE)
+                .append(NEW_LINE);
+        builder.append(RECEIPT_TABLE_HEADER);
+        builder.append(RECEIPT_DIVIDER)
+                .append(NEW_LINE);
 
         for (int i = 0; i < cartTableModel.getRowCount(); i++) {
             String id = (String) cartTableModel.getValueAt(i, 0);
@@ -320,8 +328,8 @@ public class PointOfSales extends JFrame {
                     formatCurrency(subtotal)));
         }
 
-        builder.append("------------------------------------------------------------")
-               .append(System.lineSeparator());
+        builder.append(RECEIPT_DIVIDER)
+                .append(NEW_LINE);
         builder.append(String.format("Total   : %s%n", formatCurrency(total)));
         builder.append(String.format("Poin    : %d%n", points));
         builder.append("Terima kasih telah berbelanja!");
@@ -333,17 +341,18 @@ public class PointOfSales extends JFrame {
 
     private void printReceipt() {
         if (receiptArea.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Belum ada struk untuk dicetak.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            showInfoMessage("Belum ada struk untuk dicetak.");
             return;
         }
 
         try {
             boolean completed = receiptArea.print();
             if (!completed) {
-                JOptionPane.showMessageDialog(this, "Pencetakan dibatalkan.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+                showInfoMessage("Pencetakan dibatalkan.");
             }
         } catch (PrinterException ex) {
-            JOptionPane.showMessageDialog(this, "Gagal mencetak: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Gagal mencetak: " + ex.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -353,27 +362,32 @@ public class PointOfSales extends JFrame {
 
             @Override
             protected void setValue(Object value) {
-                if (value instanceof Number) {
-                    setText(formatCurrency(((Number) value).doubleValue()));
+                if (value instanceof Number number) {
+                    setText(formatCurrency(number.doubleValue()));
                 } else {
                     super.setValue(value);
                 }
             }
         };
-        renderer.setHorizontalAlignment(DefaultTableCellRenderer.RIGHT);
+        renderer.setHorizontalAlignment(SwingConstants.RIGHT);
         table.getColumnModel().getColumn(columnIndex).setCellRenderer(renderer);
     }
 
-    private String formatCurrency(double amount) {
+    private static String formatCurrency(double amount) {
         NumberFormat format = NumberFormat.getCurrencyInstance(ID_LOCALE);
         return format.format(amount);
+    }
+
+    private void showInfoMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, INFO_TITLE, JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static void applySystemLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            // Ignore and keep default look and feel.
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                | UnsupportedLookAndFeelException ex) {
+            // Abaikan dan biarkan tampilan bawaan tetap digunakan.
         }
     }
 
